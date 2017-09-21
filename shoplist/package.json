@@ -1,0 +1,18 @@
+{
+  "name": "shoplist",
+  "version": "1.0.0",
+  "description": "สอนใน topic 2",
+  "main": "index.js",
+  "scripts": {
+    "app": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "nodejs"
+  ],
+  "author": "wichit2s",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^1.7.6"
+  }
+}
