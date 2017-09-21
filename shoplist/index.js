@@ -1,75 +1,98 @@
-
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const {app, BrowserWindow, Menu} = electron;
+const {app, BrowserWindow, Menu, ipcMain} = electron;
 
-let mainWindow, popup;
+//process.env.NODE_ENV = 'production';
 
-app.on('ready', function () {
+let mainWindow;
+let popup;
+
+app.on('ready', function() {
   mainWindow = new BrowserWindow({});
-  console.log(__dirname);
-  const urlpath = url.format({
-    pathname: path.join(__dirname, "index.html"),
-    protocol: "file:",
-    slashes: true
+  let html = url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:',
+    slasses: true
   });
-  mainWindow.loadURL(urlpath);
-  mainWindow.on('close', function(){
+  //console.log(__dirname);
+  //console.log(html);
+  mainWindow.loadURL(html);
+
+  mainWindow.on('closed', function() {
     app.quit();
   });
 
-  const menu = Menu.buildFromTemplate([
-    {
-      label: 'File',
-      submenu: [
-        { 
-          label: 'Add Item',
-          accelerator: process.platform=='darwin'? 'Command+A': 'Ctrl+A',
-          click() {
-            showPopup();
-          }
-        },
-        { 
-          label: 'Clear'
-        },
-        { 
-          label: 'Quit',
-          accelerator: process.platform=='darwin'? 'Command+Q': 'Ctrl+Q',
-          click() {
-            app.quit();
-          }
-        }
-      ]
-    },
-    {
-      label: 'DevTool',
-      submenu: [
-        {
-          label: 'Toggle',
-          click(item, focusedWindow) {
-            focusedWindow.toggleDevTools();
-          }
-        }
-      ]
-    }
-  ]);
-  Menu.setApplicationMenu(menu);
+  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(mainMenu);
 });
 
-function showPopup() {
+function createPopup() {
   popup = new BrowserWindow({
     width: 300,
-    height: 200
+    height: 200,
+    title: 'Add Shopping List Item',
   });
-  const urlpath = url.format({
+  let html = url.format({
     pathname: path.join(__dirname, 'popup.html'),
     protocol: 'file:',
-    slashes: true
+    slasses: true
   });
-  popup.on('close', function(){ popup = null; });
-  popup.loadURL(urlpath);
+  popup.loadURL(html);
+  popup.on('closed', function() {
+    popup = null;
+  });
 }
 
+ipcMain.on('item:add', function(e, item) {
+  mainWindow.webContents.send('item:add', item);
+  popup.close();
+});
 
+const mainMenuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Add Item',
+        click() {
+          createPopup();
+        }
+      },
+      {
+        label: 'Clear Item',
+        click() {
+          mainWindow.webContents.send('item:clear');
+        }
+
+      },
+      {
+        label: 'Quit',
+        accelerator: process.platform == 'darwin'? 'Command+Q':'Ctrl+Q',
+        click() {
+          app.quit();
+        }
+      }
+    ]
+  }
+];
+
+if (process.platform == 'darwin') {
+  mainMenuTemplate.unshift({});
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  mainMenuTemplate.push({
+    label: 'Developer Tools',
+    submenu: [
+      {
+        label: 'Toggle DevTools',
+        accelerator: process.platform == 'darwin'? 'Command+I':'Ctrl+I',
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
+      }
+    ]
+  });
+}
