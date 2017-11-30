@@ -1,7 +1,7 @@
 <app-toast [message]="toast.message"></app-toast>
 
 <div class="card">
-  <h4 class="card-header">Register</h4>
+  <h4 class="card-header">ลงทะเบียน</h4>
   <div class="card-block">
     <form [formGroup]="registerForm" (ngSubmit)="register()">
       <div class="input-group" [ngClass]="setClassUsername()">
@@ -19,9 +19,9 @@
       <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-black-tie"></i></span>
         <select class="form-control" name="role" formControlName="role">
-          <option value="" selected disabled>Role</option>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
+          <option value="" selected disabled>บทบาท</option>
+          <option value="user">ผู้ใช้ทั่วไป</option>
+          <option value="admin">ผู้ดูแลระบบ</option>
         </select>
       </div>
       <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid"><i class="fa fa-user-plus"></i> Register</button>

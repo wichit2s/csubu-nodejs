@@ -10,7 +10,7 @@ export class DogService {
   constructor(private http: HttpClient) { }
 
   getDogs(): Observable<Dog[]> {
-    return this.http.get<Dog[]>('/api/dog');
+    return this.http.get<Dog[]>('/api/dogs');
   }
 
   countDogs(): Observable<number> {

@@ -3,24 +3,26 @@
 <app-toast [message]="toast.message"></app-toast>
 
 <div class="card" *ngIf="!isLoading">
-  <h4 class="card-header">Current dogs ({{dogs.length}})</h4>
+  <h4 class="card-header">ตอนนี้มีสุนัข {{dogs.length}} ตัว</h4>
   <div class="card-block">
     <table class="table table-bordered table-striped">
       <thead class="thead-default">
         <tr>
+          <th></th>
           <th>ชื่อ</th>
           <th>อายุ</th>
           <th>เจ้าของ</th>
-          <th>action</th>
+          <th></th>
         </tr>
       </thead>
       <tbody *ngIf="dogs.length === 0">
         <tr>
-          <td colspan="4">ยังไม่มีสุนัขอยู่เลยในฐานข้อมูล</td>
+          <td colspan="4">no dogs in db</td>
         </tr>  
       </tbody>
       <tbody *ngIf="!isEditing">
-        <tr *ngFor="let dog of dogs">
+        <tr *ngFor="let dog of dogs; let i = index" [attr.data-index]="i">
+          <td>{{i+1}}</td>
           <td>{{dog.name}}</td>
           <td>{{dog.age}}</td>
           <td>{{dog.owner}}</td>
@@ -54,7 +56,7 @@
 </div>
 
 <div class="card" *ngIf="!isEditing">
-  <h4 class="card-header">Add new dog</h4>
+  <h4 class="card-header">เพิ่มสุนัข</h4>
   <div class="card-block">
     <form class="form-inline" [formGroup]="addDogForm" (ngSubmit)="addDog()" style="text-align:center">
       <div class="form-group">
