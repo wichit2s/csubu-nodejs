@@ -3,7 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RoutingModule } from './routing.module';
 import { SharedModule } from './shared/shared.module';
 
-import { DogService } from './services/dog.service'; // -- เพิ่มมา
+import { DogService } from './services/dog.service'; 
 import { CatService } from './services/cat.service';
 
 import { UserService } from './services/user.service';
@@ -27,7 +27,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
   declarations: [
     AppComponent,
 
-    DogsComponent, // -- เพิ่มมา
+    DogsComponent, 
 
     CatsComponent,
     AboutComponent,
@@ -47,7 +47,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     AuthGuardLogin,
     AuthGuardAdmin,
 
-    DogService, //-- เพ่ิมมา
+    DogService, 
 
     CatService,
     UserService
